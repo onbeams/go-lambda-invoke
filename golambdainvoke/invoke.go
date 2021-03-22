@@ -35,13 +35,15 @@ func Run(input Input) ([]byte, error) {
 		return nil, err
 	}
 
+	defer client.Close()
+	
 	// 3. Issue an RPC request for the Function.Invoke method
 	var response messages.InvokeResponse
 
 	if err = client.Call(functioninvokeRPC, request, &response); err != nil {
 		return nil, err
 	}
-
+	
 	if response.Error != nil {
 		return nil, errors.New(response.Error.Message)
 	}
